@@ -2,6 +2,7 @@ package Repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import Exception.AccountException;
 import bean.Account;
 
 public class RepoImpl implements Repo 
@@ -15,7 +16,7 @@ public class RepoImpl implements Repo
 		list.add(new Account("prepaid","nagin",2000.0,"197"));
 		list.add(new Account("prepaid","gajendra",2000.0,"125"));
 	}
-	public Account findbyphone(String phone) 
+	public Account findbyphone(String phone) throws AccountException 
 	{
 		for(Account i:list)
 		{
@@ -24,14 +25,20 @@ public class RepoImpl implements Repo
 				return i;
 			}
 		}
-		return null;
+		throw new AccountException("User does not Exists");
 		
 	}
-	public int Recharge(String phone,double amt) {
+	public int Recharge(String phone,double amt) throws AccountException{
 		for(Account i:list)
 		{
-			if(Integer.parseInt(i.getPhone())==Integer.parseInt(phone)) {
+			if(Integer.parseInt(i.getPhone())==Integer.parseInt(phone))
+			{
 				i.setAccountBalance(i.getAccountBalance()+amt);
+				break;
+			}
+			else
+			{
+				throw new AccountException("User does not Exists");
 			}
 		}
 		return 0;
